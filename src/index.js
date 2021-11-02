@@ -45,7 +45,7 @@ const Users = [
   },
 ];
 
-const Posts = [
+let Posts = [
   {
     id: "1",
     title: "This first title",
@@ -89,6 +89,13 @@ const typeDefs = gql`
 
   type Mutation {
     createUser(name: String!, email: String!, age: Int!): User!
+    updatePost(id: ID!, data: UpdatePostInput!): Post!
+  }
+
+  input UpdatePostInput {
+    title: String
+    description: String
+    published: Boolean
   }
 
   type User {
@@ -151,6 +158,25 @@ const resolvers = {
       Users.push(newUser);
 
       return newUser;
+    },
+    updatePost: (parent, args, ctx, info) => {
+      const { id, data } = args;
+      const isPostExist = Posts.some((post) => post.id === id);
+
+      if (!isPostExist) throw new Error("Post not found");
+
+      Posts = Posts.map((post) => {
+        if (post.id === id) {
+          return {
+            ...post,
+            ...data,
+          };
+        } else {
+          return post;
+        }
+      });
+
+      return Posts.find((post) => post.id === id);
     },
   },
   Post: {
