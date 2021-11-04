@@ -11,6 +11,7 @@ type Mutation {
 
 type Subscription {
   count: Int!
+  users: User!
 }
 
 input UpdatePostInput {

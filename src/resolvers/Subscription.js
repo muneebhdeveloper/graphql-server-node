@@ -13,4 +13,10 @@ export default {
       return pubsub.asyncIterator("count");
     },
   },
+
+  users: {
+    subscribe(parent, args, { pubsub }, info) {
+      return pubsub.asyncIterator(`users`);
+    },
+  },
 };

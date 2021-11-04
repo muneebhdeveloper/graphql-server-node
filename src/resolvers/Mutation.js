@@ -1,7 +1,8 @@
 import { Users, Posts } from "../db";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
-  createUser: (parent, args, ctx, info) => {
+  createUser: (parent, args, { pubsub }, info) => {
     const { name, email, age } = args;
     console.log(name, email, age);
     const isEmailTaken = Users.some((user) => user.email === email);
@@ -14,6 +15,7 @@ export default {
     };
 
     Users.push(newUser);
+    pubsub.publish("users", { users: newUser });
 
     return newUser;
   },
